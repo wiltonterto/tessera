@@ -5,6 +5,19 @@ import uuid
 
 # --- Modelos para as "Choices" (Opções de Escolha) ---
 
+class Artista(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    nome = models.CharField(max_length=255, verbose_name="Nome do Artista")
+    bio = models.TextField(blank=True, null=True, verbose_name="Biografia")
+    data_nascimento = models.DateField(blank=True, null=True, verbose_name="Data de Nascimento")
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = "Artista"
+        verbose_name_plural = "Artistas"
+
 class StatusChoices(models.TextChoices):
     DISPONIVEL = 'DIS', 'Disponível'
     VENDIDA = 'VEN', 'Vendida'
@@ -33,6 +46,29 @@ class TipoObraDigitalChoices(models.TextChoices):
     AR = 'AR', 'Realidade Aumentada (AR)'
     INSTALACAO = 'INSTALL', 'Instalação Digital'
 
+class FormatoImagemChoices(models.TextChoices):
+    JPEG = 'JPEG', 'JPEG'
+    PNG = 'PNG', 'PNG'
+    WEBP = 'WEBP', 'WEBP'
+    TIFF = 'TIFF', 'TIFF'
+    RAW = 'RAW', 'RAW'
+    BMP = 'BMP', 'BMP'
+    SVG = 'SVG', 'SVG'
+    OUTRO = 'OUT', 'Outro (especificar)'
+
+class FormatoAnimacaoChoices(models.TextChoices):
+    GIF = 'GIF', 'GIF'
+    WEBP_ANIMATED = 'WEBP', 'WEBP (Animado)'
+    MP4_LOOP = 'MP4', 'MP4 (Loop)' # Vídeos curtos em loop podem ser considerados animação
+    OUTRO = 'OUT', 'Outro (especificar)'
+
+class FormatoVideoChoices(models.TextChoices):
+    MP4 = 'MP4', 'MP4'
+    MOV = 'MOV', 'MOV'
+    AVI = 'AVI', 'AVI'
+    WMV = 'WMV', 'WMV'
+    MKV = 'MKV', 'MKV'
+    OUTRO = 'OUT', 'Outro (especificar)'
 
 # --- Modelo Principal: ObraDeArte ---
 
@@ -44,6 +80,8 @@ class ObraDeArte(models.Model):
     subtitulo = models.CharField(max_length=255, blank=True, null=True, verbose_name="Subtítulo")
     ano_producao = models.IntegerField(verbose_name="Ano de Produção")
     data_producao_texto = models.CharField(max_length=100, blank=True, null=True, verbose_name="Data de Produção (texto)")
+    timestamp_producao = models.DateTimeField(blank=True, null=True, verbose_name="Timestamp da Produção (Data e Hora)")
+    artista = models.ForeignKey(Artista, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Artista")
 
     # 02 - CARACTERÍSTICAS FÍSICAS E TÉCNICAS
     tecnica_principal = models.CharField(max_length=255, blank=True, null=True, verbose_name="Técnica Principal")
@@ -87,13 +125,15 @@ class ObraDeArte(models.Model):
     recomendacoes_manuseio = models.TextField(blank=True, null=True, verbose_name="Recomendações de Manuseio")
     
     # 07 - MÍDIA E DOCUMENTAÇÃO DIGITAL
-    url_imagem_alta = models.URLField(max_length=1024, blank=True, null=True, verbose_name="URL da Imagem de Alta Resolução")
+    imagem_principal = models.ImageField(max_length=1024, blank=True, null=True, verbose_name="Imagem Principal")
     url_galeria_imagens = models.URLField(max_length=1024, blank=True, null=True, verbose_name="URL da Galeria de Imagens")
     copyright_imagem = models.CharField(max_length=255, blank=True, null=True, verbose_name="Copyright da Imagem")
 
     # 08 - ARTE DIGITAL
     tipo_obra_digital = models.CharField(max_length=7, choices=TipoObraDigitalChoices.choices, blank=True, null=True, verbose_name="Tipo de Obra Digital")
-    formato_arquivo_original = models.CharField(max_length=50, blank=True, null=True, verbose_name="Formato do Arquivo Original")
+    formato_imagem_estatica = models.CharField(max_length=5, choices=FormatoImagemChoices.choices, blank=True, null=True, verbose_name="Formato (Imagem Estática)")
+    formato_animacao = models.CharField(max_length=5, choices=FormatoAnimacaoChoices.choices, blank=True, null=True, verbose_name="Formato (Animação/GIF)")
+    formato_video = models.CharField( max_length=5, choices=FormatoVideoChoices.choices, blank=True, null=True, verbose_name="Formato (Vídeo)")
     formato_arquivo_exibicao = models.CharField(max_length=50, blank=True, null=True, verbose_name="Formato do Arquivo de Exibição")
     resolucao_dimensoes_px = models.CharField(max_length=100, blank=True, null=True, verbose_name="Resolução/Dimensões (px)")
     tamanho_arquivo_mb = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name="Tamanho do Arquivo (MB)")
@@ -107,6 +147,14 @@ class ObraDeArte(models.Model):
     instrucoes_exibicao = models.TextField(blank=True, null=True, verbose_name="Instruções de Exibição")
     token_nft = models.CharField(max_length=255, blank=True, null=True, verbose_name="Token NFT")
 
+    # 09 - REGISTRO DE ALTERAÇÕES
+    justificativa_ultima_alteracao = models.TextField(
+        blank=True, 
+        null=True, 
+        verbose_name="Justificativa da Última Alteração", 
+        help_text="Descreva brevemente o motivo da alteração feita."
+    )
+
     def __str__(self):
         return f"{self.titulo} ({self.ano_producao})"
 
@@ -114,3 +162,5 @@ class ObraDeArte(models.Model):
         ordering = ['-numero_registro', 'titulo']
         verbose_name = "Obra de Arte"
         verbose_name_plural = "Obras de Arte"
+
+    

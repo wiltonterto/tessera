@@ -10,10 +10,10 @@ A proposta do **Tessera** é centralizar todas as informações do acervo em um 
 
 ## Funcionalidades Atuais (Versão de Desenvolvimento)
 
-* **Catalogação Detalhada:** Um modelo de dados completo com mais de 50 campos, cobrindo desde a identificação essencial e características físicas até o histórico de exposições, dados de conservação e metadados de arte digital.
-* **Interface Administrativa Organizada:** Formulários de cadastro divididos em seções lógicas e recolhíveis para um preenchimento limpo e focado.
-* **Busca e Filtros Avançados:** Ferramentas de busca por texto e filtros por ano, técnica e status, permitindo uma consulta rápida e eficiente do acervo.
-* **Suporte Híbrido:** Estrutura flexível que acomoda tanto obras físicas (pinturas, esculturas) quanto digitais (imagens, vídeos, glitch art).
+* **Modelo de Dados Completo:** Estrutura com mais de 50 campos, cobrindo informações físicas, digitais, de conservação, administrativas e de proveniência.
+* **Relacionamento de Artistas:** Sistema de cadastro de artistas interligado com as obras.
+* **Admin Customizado e Profissional:** Interface de gerenciamento com seções organizadas, filtros avançados por status, ano e artista, e busca textual.
+* **Suporte a Upload de Imagens:** Funcionalidade para upload de imagens diretamente pelo formulário.
 
 ## Roadmap de Futuras Funcionalidades
 

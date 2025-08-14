@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import ObraDeArte
+from .models import ObraDeArte, Artista
+
+# Registre o modelo Artista
+@admin.register(Artista)
+class ArtistaAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'data_nascimento')
+    search_fields = ('nome',)
 
 # Usamos o @admin.register como uma forma moderna de registrar o modelo com a classe de customização
 @admin.register(ObraDeArte)
@@ -8,8 +14,8 @@ class ObraDeArteAdmin(admin.ModelAdmin):
     fieldsets = [
         ('01 - Identificação Essencial', {
             'fields': (
-                'titulo', 'subtitulo', 'ano_producao', 
-                'data_producao_texto', 'numero_registro'
+                'titulo', 'subtitulo', 'artista', 'ano_producao', 
+                'data_producao_texto', 'timestamp_producao', 'numero_registro'
             )
         }),
         ('02 - Características Físicas e Técnicas', {
@@ -49,22 +55,26 @@ class ObraDeArteAdmin(admin.ModelAdmin):
         }),
         ('07 - Mídia e Documentação', {
             'classes': ('collapse',),
-            'fields': ('url_imagem_alta', 'url_galeria_imagens', 'copyright_imagem')
+            'fields': ('imagem_principal', 'url_galeria_imagens', 'copyright_imagem')
         }),
         ('08 - Arte Digital (Glitch Art)', {
+        'classes': ('collapse',),
+        'description': 'Preencha apenas os campos relevantes para o tipo de obra digital.',
+        'fields': (
+            'tipo_obra_digital', 
+            # A linha dos formatos agora tem os 3 novos campos
+            ('formato_imagem_estatica', 'formato_animacao', 'formato_video'),
+            'resolucao_dimensoes_px', 'tamanho_arquivo_mb', 'duracao',)
+        }),
+        ('09 - Registro de Alterações', {
             'classes': ('collapse',),
-            'description': 'Preencha apenas se for uma obra digital.', # Adiciona um texto de ajuda
-            'fields': (
-                'tipo_obra_digital', 'formato_arquivo_original', 'formato_arquivo_exibicao', 
-                'resolucao_dimensoes_px', 'tamanho_arquivo_mb', 'duracao', 
-                'software_utilizado', 'hardware_utilizado', 'tecnica_glitch_aplicada', 
-                'codigo_fonte_algoritmo', 'url_exibicao_online', 'dependencias_execucao', 
-                'instrucoes_exibicao', 'token_nft'
-            )
+            'fields': ('justificativa_ultima_alteracao',)
         }),
     ]
 
     # Melhora a visualização da lista de obras
     list_display = ('titulo', 'ano_producao', 'numero_registro', 'status')
-    list_filter = ('status', 'ano_producao', 'tecnica_principal')
+    list_filter = ('status', 'artista', 'ano_producao', 'tecnica_principal')
     search_fields = ('titulo', 'numero_registro')
+
+    
