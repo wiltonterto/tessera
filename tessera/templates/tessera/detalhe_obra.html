@@ -1,0 +1,45 @@
+{% extends 'tessera/base.html' %}
+
+{% block title %}{{ obra.titulo }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row g-5">
+
+    <!-- Coluna da Imagem (Ocupa 7 de 12 espaços no grid) -->
+    <div class="col-md-7">
+        {% if obra.imagem_principal %}
+            <img src="{{ obra.imagem_principal.url }}" class="img-fluid rounded shadow-lg" alt="{{ obra.titulo }}">
+        {% else %}
+            <div class="d-flex align-items-center justify-content-center bg-secondary rounded text-light" style="height: 400px;">
+                <span>Imagem não disponível</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Coluna de Informações (Ocupa 5 de 12 espaços no grid) -->
+    <div class="col-md-5">
+        <h1 class="display-5">{{ obra.titulo }}</h1>
+        <h3 class="text-muted fw-light">{{ obra.artista.nome }} ({{ obra.ano_producao }})</h3>
+        
+        <hr class="my-4">
+
+        <h4>Descrição Conceitual</h4>
+        <p class="lead">{{ obra.descricao_conceitual|linebreaks }}</p>
+
+        <div class="card bg-secondary mt-4">
+            <div class="card-header">
+                Ficha Técnica
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-secondary text-light"><strong>Técnica:</strong> {{ obra.tecnica_principal }}</li>
+                <li class="list-group-item bg-secondary text-light"><strong>Materiais:</strong> {{ obra.materiais_suporte }}</li>
+                <li class="list-group-item bg-secondary text-light"><strong>Dimensões:</strong> {{ obra.dimensoes_texto }}</li>
+            </ul>
+        </div>
+        
+    </div>
+</div>
+
+<hr class="my-5">
+<a href="{% url 'tessera:galeria' %}" class="btn btn-outline-light">&laquo; Voltar para a Galeria</a>
+{% endblock %}

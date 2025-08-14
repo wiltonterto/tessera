@@ -1,0 +1,48 @@
+{% extends 'tessera/base.html' %}
+{% load static %}
+
+{% block title %}Galeria de Obras - Tessera{% endblock %}
+
+{% block content %}
+    <!-- Header da Página com Busca -->
+    <header class="header">
+        <!-- O título da página agora fica aqui -->
+        <h2 class="page-title">Minha Galeria de Obras</h2>
+
+        <!-- O formulário de busca que estava na navbar antiga -->
+        <form class="d-flex" action="{% url 'tessera:galeria' %}" method="get" style="max-width: 500px; width: 100%;">
+            <input class="search-bar" type="search" name="q" value="{{ termo_busca|default:'' }}" placeholder="Buscar por título ou artista..." aria-label="Buscar">
+            <button class="btn btn-primary ms-2" type="submit">Buscar</button>
+        </form>
+    </header>
+
+    <!-- Grid de Obras -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for obra in obras %}
+            <div class="col">
+                <div class="card bg-secondary text-light h-100">
+                    {% if obra.imagem_principal %}
+                        <a href="{% url 'tessera:detalhe_obra' obra.id_unico %}">
+                            <img src="{{ obra.imagem_principal.url }}" class="card-img-top" alt="{{ obra.titulo }}" style="object-fit: cover; height: 200px;">
+                        </a>
+                    {% else %}
+                         <div class="card-img-top bg-dark d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <span class="text-muted">Sem imagem</span>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'tessera:detalhe_obra' obra.id_unico %}" class="text-light text-decoration-none">{{ obra.titulo }}</a>
+                        </h5>
+                        <p class="card-text text-light-emphasis">{{ obra.ano_producao }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p>Nenhuma obra encontrada com o termo "{{ termo_busca }}".</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
