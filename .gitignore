@@ -1,0 +1,13 @@
+# Virtualenv
+venv/
+
+# Arquivos de Banco de Dados
+*.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+
+# Outros
+.env
+media/
