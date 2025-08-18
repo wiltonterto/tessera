@@ -1,1 +1,1 @@
-web: gunicorn config.wsgi --bind 0.0.0.0:$PORT --log-file -
+web: gunicorn config.wsgi -k gevent --bind 0.0.0.0:$PORT --log-file -
