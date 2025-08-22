@@ -1,8 +1,8 @@
 # settings.py
 
 from pathlib import Path
-from decouple import config, Csv  # <-- MUDANÇA: Importa o Csv
-import dj_database_url             # <-- MELHORIA: Importa o dj_database_url
+from decouple import config, Csv
+import dj_database_url
 
 # Caminho base
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ========================
 # Segurança / Debug
 # ========================
-SECRET_KEY = config('SECRET_KEY') # Em produção, NUNCA deixe um valor default aqui
+SECRET_KEY = config('SECRET_KEY') 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 # <-- MUDANÇA: Forma correta e limpa de ler os hosts a partir das variáveis de ambiente

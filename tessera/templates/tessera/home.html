@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tessera - Arte Contemporânea</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <h1 class="logo">TESSERA</h1>
+        <nav>
+            <a href="{% url 'tessera:galeria' %}">Galeria</a>
+            <a href="{% url 'tessera:dashboard' %}">Dashboard</a>
+        </nav>
+    </header>
+
+    <main class="hero">
+        <div class="intro">
+            <h2>Arte em um espaço digital minimalista</h2>
+            <p>Explore obras de arte, descubra artistas e viva a experiência da galeria online.</p>
+            <a href="{% url 'tessera:galeria' %}" class="btn">Explorar Galeria</a>
+        </div>
+    </main>
+
+    <section class="destaques">
+        <h3>Obras em destaque</h3>
+        <div class="grid">
+            {% for obra in destaques %}
+                <div class="card">
+                    <img src="{{ obra.imagem.url }}" alt="{{ obra.titulo }}">
+                    <h4>{{ obra.titulo }}</h4>
+                    <p>{{ obra.artista.nome }}</p>
+                </div>
+            {% empty %}
+                <p>Nenhuma obra em destaque no momento.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; {{ now|date:"Y" }} Tessera</p>
+    </footer>
+</body>
+</html>
